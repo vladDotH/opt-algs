@@ -1,13 +1,7 @@
-import enum
-
+from PyQt6.QtCore import Qt, QLocale
 from PyQt6.QtGui import QDoubleValidator
 from PyQt6.QtWidgets import *
-
-
-class Method(enum.Enum):
-    GOLD_SLICE = 0
-    CHORDS = 1
-    NEWTON_RAFSON = 2
+from algorithms import Method
 
 
 class Control(QGroupBox):
@@ -36,14 +30,21 @@ class Control(QGroupBox):
         for w in [expressionTitle, self.expression, algGroupBox]:
             self.controlLayout.addWidget(w)
 
+        self.solve = QPushButton('Запуск', self)
+
         self.settingsLayout = QVBoxLayout(self)
         self.settingsWidget: QWidget = None
 
         self.controlLayout.addLayout(self.settingsLayout)
+        self.controlLayout.addWidget(self.solve)
         self.controlLayout.addStretch()
         self.setLayout(self.controlLayout)
 
         self.algorithmsGroup.idPressed.connect(self.method_selected)
+
+        self.validator = QDoubleValidator(self)
+        self.validator.setNotation(QDoubleValidator.Notation.StandardNotation)
+        self.validator.setLocale(QLocale("en_US"))
 
     def method_selected(self, btnId: int):
         if self.settingsWidget is not None:
@@ -61,17 +62,18 @@ class Control(QGroupBox):
     def gold_slice(self):
         widget = QWidget(self)
         lt = QVBoxLayout(widget)
+
         epsTitle = QLabel('Эпсилон', widget)
-        self.eps = QLineEdit()
-        self.eps.setValidator(QDoubleValidator(self.eps))
+        self.eps = QLineEdit('0.1', self)
+        self.eps.setValidator(self.validator)
 
         aTitle = QLabel('Точка a', widget)
-        self.a = QLineEdit()
-        self.a.setValidator(QDoubleValidator(self.a))
+        self.a = QLineEdit('-10', self)
+        self.a.setValidator(self.validator)
 
         bTitle = QLabel('Точка b', widget)
-        self.b = QLineEdit()
-        self.b.setValidator(QDoubleValidator(self.b))
+        self.b = QLineEdit('10', self)
+        self.b.setValidator(self.validator)
 
         for w in [epsTitle, self.eps, aTitle, self.a, bTitle, self.b]:
             lt.addWidget(w)
@@ -84,21 +86,22 @@ class Control(QGroupBox):
     def chords(self):
         widget = QWidget(self)
         lt = QVBoxLayout(widget)
+
         epsTitle = QLabel('Эпсилон', widget)
-        self.eps = QLineEdit()
-        self.eps.setValidator(QDoubleValidator(self.eps))
+        self.eps = QLineEdit('0.1', self)
+        self.eps.setValidator(self.validator)
 
         deltaTitle = QLabel('Дельта', widget)
-        self.delta = QLineEdit()
-        self.delta.setValidator(QDoubleValidator(self.delta))
+        self.delta = QLineEdit('0.1', self)
+        self.delta.setValidator(self.validator)
 
         aTitle = QLabel('Точка a', widget)
-        self.a = QLineEdit()
-        self.a.setValidator(QDoubleValidator(self.a))
+        self.a = QLineEdit('-10', self)
+        self.a.setValidator(self.validator)
 
         bTitle = QLabel('Точка b', widget)
-        self.b = QLineEdit()
-        self.b.setValidator(QDoubleValidator(self.b))
+        self.b = QLineEdit('10', self)
+        self.b.setValidator(self.validator)
 
         for w in [epsTitle, self.eps, deltaTitle, self.delta, aTitle, self.a, bTitle, self.b]:
             lt.addWidget(w)
@@ -113,12 +116,12 @@ class Control(QGroupBox):
         lt = QVBoxLayout(widget)
 
         deltaTitle = QLabel('Дельта', widget)
-        self.delta = QLineEdit()
-        self.delta.setValidator(QDoubleValidator(self.delta))
+        self.delta = QLineEdit('0.1', self)
+        self.delta.setValidator(self.validator)
 
         aTitle = QLabel('Точка x0', widget)
-        self.a = QLineEdit()
-        self.a.setValidator(QDoubleValidator(self.a))
+        self.a = QLineEdit('10', self)
+        self.a.setValidator(self.validator)
 
         for w in [deltaTitle, self.delta, aTitle, self.a]:
             lt.addWidget(w)
