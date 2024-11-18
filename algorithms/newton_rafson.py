@@ -4,7 +4,7 @@ import sympy
 # Функция алгоритма оптимизации для метода Ньютона-Рафсона
 def newton_rafson(
         f1: sympy.Lambda, f2: sympy.Lambda,
-        delta: float, x0: float = 0, maxIter=1_000_000_000
+        delta: float, x0: float = 0, maxIter=10_000
 ) -> (float, list[float]):
     x = x0
     X = [x0]

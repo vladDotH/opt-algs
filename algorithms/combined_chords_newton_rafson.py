@@ -3,7 +3,7 @@ import sympy
 
 def combined_chords_newton_rafson(
         f1: sympy.Lambda, f2: sympy.Lambda,
-        epsilon: float, delta: float, a: float, b: float, maxIter=1_000_000_000
+        epsilon: float, delta: float, a: float, b: float, maxIter=1_000
 ) -> (float, list[float]):
     f1a = f1(a).evalf()
     f1b = f1(b).evalf()

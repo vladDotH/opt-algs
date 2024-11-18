@@ -4,7 +4,7 @@ import sympy
 # Функция алгоритма оптимизации для метода хорд
 def chords(
         f1: sympy.Lambda, epsilon: float, delta: float,
-        a: float = -1, b: float = 1, maxIter=1_000_000_000
+        a: float = -1, b: float = 1, maxIter=10_000
 ) -> (float, list[float]):
     f1a = f1(a).evalf()
     f1b = f1(b).evalf()
