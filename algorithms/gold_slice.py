@@ -4,10 +4,15 @@ lambdaParam = ((-1 + sympy.sqrt(5)) / 2).evalf()
 
 
 # Функция алгоритма оптимизации для метода золтого сечения
-def gold_slice(f: sympy.Lambda, epsilon: float, a: float = -1, b: float = 1) -> (float, list[float]):
+def gold_slice(
+        f: sympy.Lambda, epsilon: float,
+        a: float = -1, b: float = 1, maxIter=1_000_000_000
+) -> (float, list[float]):
     X = [(a + b) / 2]
     d = b - a
-    while abs(d) > 2 * epsilon:
+    i = 0
+    while abs(d) > 2 * epsilon and i < maxIter:
+        i += 1
         ld = lambdaParam * abs(d)
         x1 = b - ld
         x2 = a + ld

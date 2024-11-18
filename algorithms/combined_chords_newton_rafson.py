@@ -3,7 +3,7 @@ import sympy
 
 def combined_chords_newton_rafson(
         f1: sympy.Lambda, f2: sympy.Lambda,
-        epsilon: float, delta: float, a: float, b: float
+        epsilon: float, delta: float, a: float, b: float, maxIter=1_000_000_000
 ) -> (float, list[float]):
     f1a = f1(a).evalf()
     f1b = f1(b).evalf()
@@ -11,7 +11,10 @@ def combined_chords_newton_rafson(
         raise Exception('incorrect interval')
 
     X = []
+    i = 0
     while True:
+        i += 1
+
         f1a = f1(a).evalf()
         f1b = f1(b).evalf()
 
@@ -41,5 +44,5 @@ def combined_chords_newton_rafson(
         X.append(x)
 
         # Проверяем условия выхода
-        if abs(f1(x).evalf()) < delta or abs(b - a) < 2 * epsilon:
+        if abs(f1(x).evalf()) < delta or abs(b - a) < 2 * epsilon or i > maxIter:
             return x, X
