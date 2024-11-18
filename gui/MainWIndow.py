@@ -54,7 +54,7 @@ class MainWindow(QMainWindow):
         try:
             x = sympy.Symbol('x')
 
-            method = self.control.algorithmsGroup.checkedId()
+            methodId = self.control.algorithmsGroup.checkedId()
             func = self.control.expression.text()
             expr = sympy.parsing.parse_expr(func)
             expr1 = expr.diff(x)
@@ -63,7 +63,9 @@ class MainWindow(QMainWindow):
             f1 = sympy.Lambda(x, expr1)
             f2 = sympy.Lambda(x, expr2)
 
-            Logger.log(f'Метод: {Method(method).translate()}', LogLevel.Info)
+            solveMethod = Method(methodId)
+
+            Logger.log(f'Метод: {solveMethod.translate()}', LogLevel.Info)
             Logger.log(f'Функция: {str(expr)}', LogLevel.Info)
             Logger.log(f'Первая производная: {str(expr1)}', LogLevel.Info)
             Logger.log(f'Вторая производная: {str(expr2)}', LogLevel.Info)
@@ -71,7 +73,7 @@ class MainWindow(QMainWindow):
             x0 = 0
             X = []
 
-            match method:
+            match methodId:
                 case Method.GOLD_SLICE.value:
                     eps = float(self.control.eps.text())
                     a = float(self.control.a.text())
@@ -98,11 +100,11 @@ class MainWindow(QMainWindow):
                     delta = float(self.control.delta.text())
                     a = float(self.control.a.text())
                     b = float(self.control.b.text())
-                    x0, X, method = parallel_gold_slice_and_combined_chords_newton_rafson(f, f1, f2, eps, delta, a, b)
+                    x0, X, solveMethod = parallel_gold_slice_and_combined_chords_newton_rafson(f, f1, f2, eps, delta, a, b)
                 case _:
                     raise Exception('Не выбран метод')
 
-            Logger.log(f'Получено решение: x = {x0}, метод: {method.translate()}', LogLevel.Info)
+            Logger.log(f'Получено решение: x = {x0}, метод: {solveMethod.translate()}', LogLevel.Info)
             self.plot.set_data(f, x0, X)
 
         except Exception as exception:
