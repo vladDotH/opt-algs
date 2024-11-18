@@ -6,10 +6,10 @@ from algorithms import combined_chords_newton_rafson
 
 def parallel_gold_slice_and_combined_chords_newton_rafson(
         f: sympy.Lambda, f1: sympy.Lambda, f2: sympy.Lambda,
-        epsilon: float, delta: float, a: float, b: float
+        epsilon: float, delta: float, a: float, b: float, maxIter=1_000_000_000
 ) -> (float, list[float], Method):
-    xmin1, steps1 = gold_slice(f, delta, a, b)
-    xmin2, steps2 = combined_chords_newton_rafson(f1, f2, epsilon, delta, a, b)
+    xmin1, steps1 = gold_slice(f, delta, a, b, maxIter)
+    xmin2, steps2 = combined_chords_newton_rafson(f1, f2, epsilon, delta, a, b, maxIter)
     # Выбор наилучшего результата
     if f(xmin1) < f(xmin2):
         return xmin1, steps1, Method.GOLD_SLICE
