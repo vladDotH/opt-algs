@@ -1,3 +1,5 @@
+import traceback
+
 import sympy.parsing
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
@@ -91,7 +93,7 @@ class MainWindow(QMainWindow):
                     delta = float(self.control.delta.text())
                     a = float(self.control.a.text())
                     b = float(self.control.b.text())
-                    x0, X = parallel_gold_slice_and_combined_chords_newton_rafson(f1, f2, eps, delta, a, b)
+                    x0, X = parallel_gold_slice_and_combined_chords_newton_rafson(f, f1, f2, eps, delta, a, b)
                 case _:
                     raise Exception('Не выбран метод')
 
@@ -99,6 +101,7 @@ class MainWindow(QMainWindow):
             self.plot.set_data(f, x0, X)
 
         except Exception as exception:
+            Logger.log(traceback.format_exc(), LogLevel.Warn)
             msg = exception.__str__()
             QMessageBox(
                 QMessageBox.Icon(QMessageBox.Icon.Warning),
