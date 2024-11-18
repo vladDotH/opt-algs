@@ -2,6 +2,7 @@ from PyQt6.QtCore import Qt, QLocale
 from PyQt6.QtGui import QDoubleValidator
 from PyQt6.QtWidgets import *
 from algorithms import Method
+from util import Logger, LogLevel
 
 
 class Control(QGroupBox):
@@ -14,16 +15,17 @@ class Control(QGroupBox):
         self.expression = QLineEdit(self)
 
         algGroupBox = QGroupBox('Метод', self)
-        algLt = QGridLayout(algGroupBox)
+        algLt = QVBoxLayout(algGroupBox)
         self.algorithmsGroup = QButtonGroup(algGroupBox)
         gold_slice = QRadioButton('Золотого сечения', self)
         chords = QRadioButton('Хорд', self)
         newton_rafson = QRadioButton('Ньютона-Рафсона', self)
+        combined = QRadioButton('Комбинированый хорд и Н.-Р.', self)
+        parallel = QRadioButton('Параллельный зол. сечения и комбинированного', self)
 
-        cols = 3
-        for i, b in enumerate([gold_slice, chords, newton_rafson]):
+        for i, b in enumerate([gold_slice, chords, newton_rafson, combined, parallel]):
             self.algorithmsGroup.addButton(b, i)
-            algLt.addWidget(b, i // cols, i % cols)
+            algLt.addWidget(b)
 
         algGroupBox.setLayout(algLt)
 
@@ -32,7 +34,7 @@ class Control(QGroupBox):
 
         self.solve = QPushButton('Запуск', self)
 
-        self.settingsLayout = QVBoxLayout(self)
+        self.settingsLayout = QVBoxLayout()
         self.settingsWidget: QWidget = None
 
         self.controlLayout.addLayout(self.settingsLayout)
@@ -50,7 +52,7 @@ class Control(QGroupBox):
         if self.settingsWidget is not None:
             self.settingsLayout.removeItem(self.settingsLayout.itemAt(0))
             self.settingsWidget.deleteLater()
-
+        Logger.log(f'Выбран метод {Method(btnId).name}')
         match btnId:
             case Method.GOLD_SLICE.value:
                 self.gold_slice()
@@ -58,6 +60,10 @@ class Control(QGroupBox):
                 self.chords()
             case Method.NEWTON_RAFSON.value:
                 self.newton_rafson()
+            case Method.CHORDS_AND_NEWTON_RAFSON.value:
+                self.combined()
+            case Method.PARALLEL_GOLD_SLICE_AND_CHORDS_AND_NEWTON_RAFSON.value:
+                self.parallel()
 
     def gold_slice(self):
         widget = QWidget(self)
@@ -130,3 +136,9 @@ class Control(QGroupBox):
         widget.setLayout(lt)
         self.settingsLayout.addWidget(widget)
         self.settingsWidget = widget
+
+    def combined(self):
+        return self.chords()
+
+    def parallel(self):
+        return self.chords()
