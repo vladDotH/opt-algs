@@ -100,11 +100,15 @@ class MainWindow(QMainWindow):
                     delta = float(self.control.delta.text())
                     a = float(self.control.a.text())
                     b = float(self.control.b.text())
-                    x0, X, solveMethod = parallel_gold_slice_and_combined_chords_newton_rafson(f, f1, f2, eps, delta, a, b)
+                    x0, X, solveMethod = parallel_gold_slice_and_combined_chords_newton_rafson(f, f1, f2, eps, delta, a,
+                                                                                               b)
                 case _:
                     raise Exception('Не выбран метод')
 
-            Logger.log(f'Получено решение: x = {x0}, метод: {solveMethod.translate()}', LogLevel.Info)
+            Logger.log(
+                f'Получено решение: x = {x0}, метод: {solveMethod.translate()}, количество шагов: {len(X)}',
+                LogLevel.Info
+            )
             self.plot.set_data(f, x0, X)
 
         except Exception as exception:
