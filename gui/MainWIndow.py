@@ -1,3 +1,4 @@
+import time
 import traceback
 
 import sympy.parsing
@@ -62,6 +63,7 @@ class MainWindow(QMainWindow):
             f1 = sympy.Lambda(x, expr1)
             f2 = sympy.Lambda(x, expr2)
 
+            start = time.time_ns()
             solveMethod = Method(methodId)
 
             Logger.log(f'Метод: {solveMethod.translate()}', LogLevel.Info)
@@ -104,8 +106,10 @@ class MainWindow(QMainWindow):
                 case _:
                     raise Exception('Не выбран метод')
 
+            end = time.time_ns()
             Logger.log(
-                f'Получено решение: x = {x0}, метод: {solveMethod.translate()}, количество шагов: {len(X)}',
+                f'Получено решение: x = {x0}, метод: {solveMethod.translate()}, количество шагов: {len(X)}.\n'+
+                f'Время затрачено: {(end-start)/1e9} секунд',
                 LogLevel.Info
             )
             self.plot.set_data(f, x0, X)
