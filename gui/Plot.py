@@ -33,15 +33,17 @@ class Plot(QGroupBox):
     def set_data(self, f: sympy.Lambda, x0: float, X: list[float]) -> None:
         self.clear()
 
+        padding = 2.5
         minPoints = 100
-        xmin = float(min(x0, *X) - 10)
-        xmax = float(max(x0, *X) + 10)
-        span = (xmax - xmin) / 2 + 10
+        xmin = float(min(x0, *X) - padding)
+        xmax = float(max(x0, *X) + padding)
+        span = (xmax - xmin) / 2 + padding
         points = max(len(X), minPoints) * 10
+
         plotX = np.linspace(xmin - span, xmax + span, points)
         plotY = [f(x).evalf() for x in plotX]
 
-        self.plt.plot(plotX, plotY, color='royalblue', linestyle='--')
+        self.plt.plot(plotX, plotY, color='royalblue')
 
         y0 = f(x0).evalf()
         Y = [f(x).evalf() for x in X]
@@ -56,7 +58,7 @@ class Plot(QGroupBox):
         xMargin = abs(xmax - xmin) / 10
         yMargin = abs(ymax - ymin) / 10
 
-        span = 1
+        span = 2.5
         self.plt.set_ylim(ymin - yMargin - span, ymax + yMargin + span)
         self.plt.set_xlim(xmin - xMargin - span, xmax + xMargin + span)
         self.canvas.draw()
