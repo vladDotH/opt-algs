@@ -8,7 +8,7 @@ def combined_chords_newton_rafson(
     f1a = f1(a).evalf()
     f1b = f1(b).evalf()
     if not (f1a < 0 < f1b):
-        raise Exception('incorrect interval')
+        raise Exception('Некорректный интервал')
 
     X = []
     i = 0
